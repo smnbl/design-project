@@ -1,0 +1,76 @@
+#+TITLE: Napari-sparrow on the HPC, my findings
+#+AUTHOR: Simon Bil
+
+* Setting up the environment
+TODO: add a setup environment script
+
+** Install micromamba
+#+begin_src bash
+  curl micro.mamba.pm/install.sh | bash
+#+end_src
+
+** Setup package directory
+Change pkgdirs setting in the configuration?
+
+** Setup environment directory
+set $MAMBA_ROOT_PREFIX in bashrc to a folder in the $VSC_DATA storage.
+
+** Initialize environment
+TODO
+
+** Setup paths in configs/path
+Go to your '$VSC_DATA' folder which has more storage capacity & setup data & log folders.
+
+#+begin_src bash
+  cd $VSC_DATA
+  mkdir -p dp/logs dp/data
+#+end_src
+
+* Setting up the Liver Experiment
+** Copy data into the resolve liver data folder
+Create a new folder inside the data folder called =resolve_liver=:
+
+#+begin_src bash
+cd $VSC_DATA/dp/data
+mkdir resolve_liver
+cd resolve_liver
+#+end+src
+
+Put the sample data inside this folder.
+
+** Add the experiment configuration file
+If you switch to my branch =TODO=, the configuration files will be present:
+- local configuration in =configs/local/default.yaml= that configure the cluster and how experiments launch
+- a sample experiment configuration for the resolve_liver dataset in =configs/experiment/liver_small.yaml=
+
+** Run the experiment
+Invoke ~sparrow +experiment=liver --multirun~ to run the experiment on the cluster.
+
+* Extra notes
+Most of these are unfinished tinkerings...
+
+** Switching to a GPU-capable cluster
+#+begin_src bash
+  ml swap cluster/joltik
+#+end_src
+
+TODO: the run does not seem to recognize the GPU :/.
+
+** Following the progress
+You can find the logs in the ~logs/segment/multiruns/<ID>/.submitit/<ID>~ folder.
+
+TODO: I think this second id is the node id (if running on multiple nodes)?
+
+** Example: following the stderr stream of the process
+By using ~tail -f~ the output will keep updating as new information comes in.
+
+#+begin_src bash
+  cd $VSC_DATA/dp/logs/segment/multiruns/2022-11-16_22-58-02/.submitit/60031879/
+  # stdout:
+  tail -f 60031879_0_log.out
+
+  # stderr:
+  tail -f 60031879_0_log.err
+#+end_src
+
+Note that upon failure, the error stream is printed.
