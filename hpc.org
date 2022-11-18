@@ -34,7 +34,7 @@ Create a new folder inside the data folder called =resolve_liver=:
 cd $VSC_DATA/dp/data
 mkdir resolve_liver
 cd resolve_liver
-#+end+src
+#+end_src
 
 Put the sample data inside this folder.
 
